@@ -1,0 +1,25 @@
+/* Убираем верхний отступ */
+.block-container {
+    padding-top: 0rem !important;
+    padding-bottom: 3rem !important;
+}
+
+/* Удаляем кнопку Deploy и верхнюю панель Streamlit */
+#MainMenu, header, footer {
+    visibility: hidden;
+}
+
+/* Удаляем саму кнопку Deploy (класс может меняться, но чаще всего работает) */
+.stDeployButton {
+    display: none !important;
+}
+
+/* Дополнительный селектор, если класс другой */
+.st-emotion-cache-1dp5vir {
+    display: none !important;
+}
+
+.element-container:has(.plotly-graph-div) {
+    margin-right: 16px;
+    margin-left: 16px;
+}
