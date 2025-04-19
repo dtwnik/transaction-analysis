@@ -33,15 +33,18 @@ def top_products_bar(df: pd.DataFrame):
 def cashbox_sum_bar(df: pd.DataFrame):
     df["cashboxId"] = df["cashboxId"].astype(str)
 
-    df_unique = df.drop_duplicates(subset="entry_id")
-    by_cashbox = df_unique.groupby("cashboxId")["totalAmount"].sum().reset_index()
-    by_cashbox.columns = ["Cashbox ID", "Total Amount"]
+    sales_by_cashbox = (
+        df.groupby("cashboxId")["product_price"]
+        .sum()
+        .reset_index()
+        .rename(columns={"cashboxId": "Cashbox ID", "product_price": "Total Sales"})
+    )
 
     fig = px.bar(
-        by_cashbox,
+        sales_by_cashbox,
         x="Cashbox ID",
-        y="Total Amount",
-        title="Sales by Cashbox",
+        y="Total Sales",
+        title="Sales by Cashbox (based on products)",
         text_auto=True,
         color_discrete_sequence=["#3D8BFD"]
     )
@@ -53,7 +56,7 @@ def cashbox_sum_bar(df: pd.DataFrame):
 def sales_by_day_bar(df: pd.DataFrame):
     df["created_at"] = pd.to_datetime(df["created_at"])
 
-    sales_by_day = df.groupby(df["created_at"].dt.date.astype(str))["totalAmount"].sum().reset_index()
+    sales_by_day = df.groupby(df["created_at"].dt.date.astype(str))["product_price"].sum().reset_index()
     sales_by_day.columns = ["Date", "Total Amount"]
 
     fig = px.bar(
